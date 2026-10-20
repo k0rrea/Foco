@@ -1,0 +1,1 @@
+-- define a estrutura das tabelas.
