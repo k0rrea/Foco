@@ -42,7 +42,7 @@ Funcionalidades previstas para o sistema:
 ## Estrutura do projeto
 
 ```text
-ProjetoDevWeb/
+Foco/
 ├── config/
 │   └── database.php
 ├── database/

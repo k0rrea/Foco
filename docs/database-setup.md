@@ -62,8 +62,8 @@ Configure um VirtualHost no Apache do XAMPP, em `/opt/lampp/etc/extra/httpd-vhos
 ```apache
 <VirtualHost *:80>
     ServerName foco.local
-    DocumentRoot "/CAMINHO/ProjetoDevWeb/public"
-    <Directory "/CAMINHO/ProjetoDevWeb/public">
+    DocumentRoot "/CAMINHO/Foco/public"
+    <Directory "/CAMINHO/Foco/public">
         Require all granted
         AllowOverride None
         Options -Indexes
