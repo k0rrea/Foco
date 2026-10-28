@@ -43,6 +43,7 @@ Funcionalidades previstas para o sistema:
 
 ```text
 Foco/
+├── app/                  # Sessão, autenticação e processamento das tarefas
 ├── config/
 │   └── database.php
 ├── database/
@@ -59,7 +60,8 @@ Foco/
 │   ├── pages/
 │   │   ├── login.php
 │   │   └── register.php
-│   └── index.php
+│   ├── index.php
+│   └── logout.php
 ├── .env.example
 ├── .gitignore
 ├── DESIGN.md
@@ -81,4 +83,4 @@ Para configurar o ambiente local, importar as tabelas e testar a conexão, consu
 
 O projeto está em desenvolvimento. A estrutura inicial do banco de dados e a conexão PHP com PDO já foram implementadas e testadas localmente.
 
-As funcionalidades de gerenciamento de tarefas e autenticação ainda estão em desenvolvimento.
+Cadastro, login, logout e CRUD de tarefas estão integrados ao banco. O dashboard exige autenticação. Consulte o [roteiro de testes locais](docs/auth-and-tasks.md).

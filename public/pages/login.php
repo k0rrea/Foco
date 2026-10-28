@@ -1,3 +1,4 @@
+<?php $register = false; require dirname(__DIR__, 2) . "/app/auth.php"; ?>
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
 
@@ -27,13 +28,11 @@
                     <h1 id="login-titulo">Bom ter você de volta.</h1>
                     <p>Entre na sua conta para continuar.</p>
                 </header>
-
-                <!-- Estrutura HTML para integração com o backend.
-                     Habilitar o envio somente após implementar a autenticação e definir o destino POST. -->
                 <form class="auth-form" method="post" aria-describedby="login-notice">
+                    <?= csrf_field() ?>
                     <div class="field">
                         <label for="email">E-mail</label>
-                        <input id="email" name="email" type="email" autocomplete="username"
+                        <input id="email" name="email" value="<?= e($email) ?>" type="email" autocomplete="username"
                             placeholder="voce@exemplo.com" maxlength="254" required>
                     </div>
                     <div class="field">
@@ -42,10 +41,9 @@
                             placeholder="Digite sua senha" required>
                     </div>
                     <!-- Mensagens de validação do servidor poderão ser inseridas próximas aos campos. -->
-                    <button class="button button-primary auth-submit" type="submit" disabled>Entrar na minha
+                    <button class="button button-primary auth-submit" type="submit">Entrar na minha
                         conta</button>
-                    <p id="login-notice" class="auth-notice">Página em construção. A entrada na conta será habilitada
-                        após a integração da autenticação.</p>
+                    <p id="login-notice" class="auth-notice" role="status"><?= e($notice) ?></p>
                 </form>
 
                 <p class="auth-register">Ainda não tem uma conta? <a href="register.php">Criar conta</a></p>
