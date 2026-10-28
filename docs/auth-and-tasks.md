@@ -1,14 +1,10 @@
 # Autenticação e tarefas — testes locais
 
-## Ambiente
+## Antes de testar
 
-1. Inicie o XAMPP: `sudo /opt/lampp/lampp start`.
-2. Confira `PDO`, `pdo_mysql` e `mbstring` com `/opt/lampp/bin/php -m`.
-3. Mantenha o `.env` local com as credenciais válidas. Nenhuma senha deve ser adicionada ao Git. O usuário do Apache precisa conseguir ler esse arquivo, sem que ele fique acessível pela web.
-4. Sirva somente `public/`, conforme [configuração do XAMPP](database-setup.md). Acesse `http://foco.local/` se configurou o VirtualHost descrito nesse guia. Não use a raiz do repositório como DocumentRoot.
-5. O Apache precisa de um diretório de sessões PHP gravável pelo seu usuário de execução (`session.save_path` no php.ini). Mantenha `display_errors = Off` e `log_errors = On`. Não use permissões globais de escrita para resolver problemas de acesso no Fedora/SELinux.
+Conclua o [guia de instalação](../README.md), incluindo banco, `.env`, Apache apontando para `public/` e sessões PHP. Use o endereço configurado, como `http://foco.local/`. Não é necessário reimportar o SQL se as tabelas já correspondem ao schema; uma instalação nova precisa da importação inicial.
 
-As tabelas existentes foram reaproveitadas sem migração, exclusão de dados ou recriação. Não é necessário reimportar o SQL para instalar esta integração. O usuário do banco precisa das permissões SELECT, INSERT, UPDATE e DELETE nas tabelas de `db_foco`.
+Use contas e tarefas próprias de teste. Os procedimentos a seguir gravam dados. Não altere identificadores de registros de terceiros. Não existe rotina automática de testes ou limpeza incluída no repositório; remova tarefas pela interface após a verificação. A remoção de contas, se desejada, é administrativa e exige cuidado, pois a chave estrangeira exclui suas tarefas em cascata.
 
 ## Roteiro funcional
 
@@ -47,8 +43,10 @@ As tabelas existentes foram reaproveitadas sem migração, exclusão de dados ou
 
 JavaScript é necessário para abrir os modais e usar os filtros. Os registros e indicadores são renderizados no servidor. O CSS e as imagens foram preservados.
 
-## Validação executada nesta implementação
+## Histórico e limites da validação
 
-Passaram as verificações de sintaxe PHP (XAMPP PHP 8.2.4), sintaxe JavaScript e `git diff --check`. Testes HTTP com o PHP do XAMPP e MariaDB 10.4.28 cobriram cadastro, e-mail duplicado, confirmação de senha, login correto/incorreto, regeneração da sessão, dashboard privado, CSRF, CRUD, persistência, indicadores, escape HTML, validações e isolamento entre duas contas.
+Na implementação anterior, passaram as verificações de sintaxe PHP (XAMPP PHP 8.2.4), sintaxe JavaScript e `git diff --check`. Testes HTTP com o PHP do XAMPP e MariaDB 10.4.28 cobriram cadastro, e-mail duplicado, confirmação de senha, login correto/incorreto, regeneração da sessão, dashboard privado, CSRF, CRUD, persistência, indicadores, escape HTML, validações e isolamento entre duas contas.
 
 Os testes HTTP utilizaram um servidor PHP local temporário e não validaram a renderização visual nem as interações JavaScript em navegador real. Execute o roteiro acima no Apache/XAMPP para conferir esses pontos. As contas temporárias criadas durante os testes foram removidas após a validação, sem alterar registros preexistentes.
+
+A revisão documental não repetiu testes que gravam dados e não instalou ou reconfigurou serviços. Windows, instalação limpa e conferência visual em navegador real permanecem como validações manuais.

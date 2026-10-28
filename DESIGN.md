@@ -5,13 +5,13 @@
 ## 1. Visão geral
 
 **Nome:** Foco  
-**Categoria:** Gerenciador de tarefas e hábitos  
+**Categoria:** Gerenciador de tarefas\
 **Tipo:** Aplicação web responsiva  
 **Tecnologias:** HTML5, CSS3, JavaScript, PHP e banco de dados relacional.
 
 ### Objetivo
 
-Criar uma interface moderna, minimalista, intuitiva e consistente, que facilite a organização de tarefas e hábitos sem distrações desnecessárias.
+Criar uma interface moderna, minimalista, intuitiva e consistente, que facilite a organização de tarefas sem distrações desnecessárias.
 
 O design deve transmitir:
 
@@ -474,7 +474,7 @@ Não reorganizar a arquitetura existente sem necessidade.
 
 ## 13. Diretrizes para o Codex
 
-Este documento deve servir como referência de design durante o desenvolvimento do Foco.
+O Foco está finalizado. Este documento serve como referência de design para eventuais correções ou implementações.
 
 Ao criar ou modificar interfaces:
 
@@ -485,7 +485,7 @@ Ao criar ou modificar interfaces:
 5. Não introduzir novas cores, fontes ou estilos sem justificativa.
 6. Garantir responsividade e acessibilidade.
 7. Preservar funcionalidades existentes.
-8. Não substituir a arquitetura atual por frameworks sem solicitação explícita.
+8. Preservar a arquitetura em PHP tradicional, sem frameworks, API REST separada, Composer, npm ou etapa de compilação.
 9. Verificar os caminhos reais das logos e outros assets antes de referenciá-los.
 10. Preferir soluções simples, legíveis e adequadas a um projeto acadêmico em grupo.
 
@@ -496,7 +496,7 @@ O Foco utiliza uma abordagem tradicional de desenvolvimento web:
 - HTML e CSS para estrutura e apresentação.
 - JavaScript para interatividade.
 - PHP para renderização de páginas e processamento no servidor.
-- MySQL ou PostgreSQL para persistência de dados.
+- MySQL/MariaDB com PDO para persistência de dados.
 - Operações CRUD para gerenciamento das informações.
 
 Não presumir que o projeto utiliza React, Vue, Next.js ou uma arquitetura baseada principalmente em APIs.
