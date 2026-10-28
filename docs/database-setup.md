@@ -1,6 +1,6 @@
 ## Banco de dados — XAMPP no Linux
 
-Execute os comandos abaixo na raiz do projeto. O banco inicial usa MariaDB 10.4 ou MySQL 5.7/8.x e não implementa cadastro, login ou CRUD.
+Execute os comandos abaixo na raiz do projeto. O banco inicial usa MariaDB 10.4 ou MySQL 5.7/8.x e é utilizado pela autenticação e pelo CRUD de tarefas. Consulte também o [roteiro de testes](auth-and-tasks.md).
 
 ### 1. Iniciar o XAMPP
 
@@ -21,7 +21,7 @@ Use uma conta administrativa do banco (a senha será solicitada no terminal):
 
 Em instalações locais do XAMPP sem senha de root, pressione Enter quando solicitada. Também é possível importar `database/schema.sql` pela aba **Importar** do phpMyAdmin em `http://localhost/phpmyadmin`.
 
-O SQL cria `db_foco`, `usuarios` e `tarefas`. Cada tarefa pertence a um usuário; excluir um usuário exclui suas tarefas. E-mails são únicos, e `senha_hash` está reservado para hashes produzidos por `password_hash()` na futura implementação do cadastro. Status, prioridades e categorias mantêm os valores usados na interface; ausência de categoria será representada por `NULL`.
+O SQL cria `db_foco`, `usuarios` e `tarefas`. Cada tarefa pertence a um usuário; excluir um usuário exclui suas tarefas. E-mails são únicos, e `senha_hash` está reservado para hashes produzidos por `password_hash()` no cadastro. Status, prioridades e categorias mantêm os valores usados na interface; ausência de categoria será representada por `NULL`.
 
 A importação pode ser repetida sem apagar registros. Ela não migra nem corrige tabelas preexistentes com estrutura diferente.
 
@@ -51,7 +51,7 @@ O `.env` já é ignorado pelo Git. Não coloque credenciais reais em `.env.examp
 /opt/lampp/bin/php -r '$pdo = require "config/database.php"; echo $pdo->query("SELECT 1")->fetchColumn() === 1 ? "Conexão OK\n" : "Falha no teste\n";'
 ```
 
-O resultado esperado é `Conexão OK`. O teste não altera registros. Na futura integração, obtenha o PDO com `require` usando o caminho apropriado até `config/database.php`.
+O resultado esperado é `Conexão OK`. O teste não altera registros. Na integração PHP, obtenha o PDO com `require` usando o caminho apropriado até `config/database.php`.
 
 Falhas de inicialização encerram a execução com uma mensagem genérica e, em requisições web, status HTTP 503. O log do PHP recebe apenas uma mensagem genérica, sem a exceção original. Confira localmente o serviço, as credenciais e a importação ao investigar uma falha.
 

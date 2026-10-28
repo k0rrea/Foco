@@ -1,3 +1,4 @@
+<?php $register = true; require dirname(__DIR__, 2) . "/app/auth.php"; ?>
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
 
@@ -27,19 +28,16 @@
                     <h1 id="cadastro-titulo">Seu foco começa aqui.</h1>
                     <p>Crie sua conta e dê o primeiro passo.</p>
                 </header>
-
-                <!-- Estrutura HTML para integração com o backend.
-                     Habilitar o envio após implementar o cadastro e definir o destino POST.
-                     Validar os dados e a confirmação de senha no servidor. -->
                 <form class="auth-form" method="post" aria-describedby="cadastro-notice">
+                    <?= csrf_field() ?>
                     <div class="field">
                         <label for="nome">Nome</label>
-                        <input id="nome" name="name" type="text" autocomplete="name"
+                        <input id="nome" name="name" value="<?= e($name) ?>" type="text" autocomplete="name"
                             placeholder="Como podemos chamar você?" maxlength="150" required>
                     </div>
                     <div class="field">
                         <label for="email">E-mail</label>
-                        <input id="email" name="email" type="email" autocomplete="username"
+                        <input id="email" name="email" value="<?= e($email) ?>" type="email" autocomplete="username"
                             placeholder="voce@exemplo.com" maxlength="254" required>
                     </div>
                     <div class="field">
@@ -55,9 +53,8 @@
                         <small id="confirmar-senha-ajuda" class="muted">Repita a mesma senha informada acima.</small>
                     </div>
                     <!-- Mensagens de validação do servidor poderão ser inseridas próximas aos campos. -->
-                    <button class="button button-primary auth-submit" type="submit" disabled>Criar minha conta</button>
-                    <p id="cadastro-notice" class="auth-notice">Página em construção. A criação de contas será
-                        habilitada após a integração com o sistema.</p>
+                    <button class="button button-primary auth-submit" type="submit">Criar minha conta</button>
+                    <p id="cadastro-notice" class="auth-notice" role="status"><?= e($notice) ?></p>
                 </form>
 
                 <p class="auth-register">Já tem uma conta? <a href="login.php">Entrar</a></p>
