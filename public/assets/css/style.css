@@ -161,6 +161,13 @@ a, button, input, select, textarea { transition: background-color 180ms ease, bo
 .button-primary:disabled { background: var(--primary); }
 
 /* 6. Responsividade. */
+@media (min-width: 769px) {
+    .app-layout { height: 100vh; height: 100dvh; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+    .sidebar, .main-layout { min-height: 0; overflow-y: auto; }
+    .main-layout { position: relative; }
+    .topbar { position: sticky; top: 0; z-index: 1; }
+    .sidebar > * { flex-shrink: 0; }
+}
 @media (max-width: 1024px) {
     .app-layout { grid-template-columns: 12.5rem minmax(0, 1fr); }
     .sidebar { padding: 1.5rem 1rem; }
