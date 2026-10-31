@@ -8,6 +8,7 @@
     <meta name="description" content="Organize suas tarefas e abra espaço para o que importa com o Foco.">
     <title>Minhas tarefas | Foco</title>
     <link rel="icon" type="image/png" href="assets/images/FocoApp.png">
+    <script src="assets/js/theme.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="assets/js/app.js" defer></script>
 </head>
@@ -43,6 +44,14 @@
             </div>
 
             <div class="account-links">
+                <div class="field theme-field">
+                    <label for="theme-mode">Aparência</label>
+                    <select id="theme-mode">
+                        <option value="light">Claro</option>
+                        <option value="dark">Escuro</option>
+                        <option value="system" selected>Sistema</option>
+                    </select>
+                </div>
                 <form action="logout.php" method="post"><?= csrf_field() ?><button class="nav-link" type="submit">Sair da minha conta <span aria-hidden="true">↗</span></button></form>
             </div>
         </aside>

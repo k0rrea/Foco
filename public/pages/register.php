@@ -8,6 +8,7 @@
     <meta name="description" content="Crie sua conta no Foco e comece a organizar suas tarefas e prioridades.">
     <title>Criar conta | Foco</title>
     <link rel="icon" type="image/png" href="../assets/images/FocoApp.png">
+    <script src="../assets/js/theme.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 

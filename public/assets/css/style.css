@@ -1,4 +1,4 @@
-/* 1. Tokens — DESIGN.md. Tema claro inicial; tema escuro preparado para integração. */
+/* 1. Tokens — paletas de DESIGN.md, selecionadas por data-theme. */
 :root {
     color-scheme: light;
     --bg: #F5F7FB;
@@ -73,6 +73,7 @@ h3 { font-size: 1.125rem; font-weight: 600; }
 .sidebar-note strong { font-size: .8125rem; }
 .sidebar-note p { margin-top: .5rem; color: var(--text-secondary); font-size: .75rem; line-height: 1.7; }
 .account-links { border-top: 1px solid var(--border); padding: 1.25rem .5rem 0; font-size: .8125rem; }
+.theme-field { margin-bottom: 1rem; }
 .account-links > a { display: flex; justify-content: space-between; font-weight: 600; }
 .account-links p { margin-top: .5rem; color: var(--text-secondary); font-size: .75rem; }
 .account-links p a { color: var(--primary); }

@@ -8,6 +8,7 @@
     <meta name="description" content="Entre no Foco e encontre espaço para organizar suas tarefas e seu dia.">
     <title>Entrar | Foco</title>
     <link rel="icon" type="image/png" href="../assets/images/FocoApp.png">
+    <script src="../assets/js/theme.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
