@@ -1,4 +1,5 @@
 <?php require dirname(__DIR__) . "/app/tasks.php"; ?>
+<!-- Área privada: o controlador acima exige autenticação e prepara tarefas, indicadores e mensagens. -->
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
 
@@ -8,6 +9,7 @@
     <meta name="description" content="Organize suas tarefas e abra espaço para o que importa com o Foco.">
     <title>Minhas tarefas | Foco</title>
     <link rel="icon" type="image/png" href="assets/images/FocoApp.png">
+    <!-- O tema precede o CSS; as interações de tarefas aguardam o HTML com defer. -->
     <script src="assets/js/theme.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="assets/js/app.js" defer></script>
@@ -17,6 +19,7 @@
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
     <div class="app-layout">
+        <!-- Navegação, aparência e saída da conta compartilham a coluna lateral. -->
         <aside class="sidebar" aria-label="Menu lateral">
             <a class="brand" href="index.php" aria-label="Foco — página principal">
                 <img class="logo-light" src="assets/images/FocoEscritaPreto.png" alt="Foco" width="2193" height="717">
@@ -43,6 +46,7 @@
                 <p>Você não precisa fazer tudo agora. Comece pelo que importa.</p>
             </div>
 
+            <!-- Aparência é uma preferência do navegador; logout usa POST protegido por CSRF. -->
             <div class="account-links">
                 <div class="field theme-field">
                     <label for="theme-mode">Aparência</label>
@@ -56,6 +60,7 @@
             </div>
         </aside>
 
+        <!-- Coluna com rolagem própria no desktop e cabeçalho mantido no topo pelo CSS. -->
         <div class="main-layout">
             <header class="topbar">
                 <p>Meu espaço <span aria-hidden="true">/</span> <strong>Minhas tarefas</strong></p>
@@ -110,6 +115,7 @@
                     </header>
 
                     <p id="temporary-note" class="temporary-note" role="status"><?= e($notice) ?></p>
+                    <!-- Os filtros atuam nas linhas renderizadas, sem alterar a consulta ou os indicadores. -->
                     <fieldset class="task-filters" aria-describedby="temporary-note">
                         <legend class="sr-only">Buscar e filtrar tarefas</legend>
                         <div class="field search-field"><label for="busca">Buscar tarefa</label><input id="busca"
@@ -129,6 +135,7 @@
                             </select></div>
                     </fieldset>
 
+                    <!-- O parcial gera as linhas; data-user distingue o estado dos filtros por usuário. -->
                     <ul id="task-list" class="task-list" aria-label="Tarefas cadastradas" data-user="<?= $userId ?>" <?= !$tasks ? "hidden" : "" ?>><?php require dirname(__DIR__) . "/app/task-list.php"; ?></ul>
                     <p id="no-results" class="no-results" hidden>Nenhuma tarefa corresponde aos filtros escolhidos.</p>
                     <p id="task-feedback" class="sr-only" role="status"></p>
@@ -156,6 +163,7 @@
                     </header>
                     <div class="editor-content">
                         <p id="preview-note" class="preview-note"><?= e($error ?: 'Preencha os dados para salvar a tarefa na sua conta.') ?></p>
+                        <!-- data-old repõe dados após erro; action e id distinguem criação de edição no servidor. -->
                         <form method="post" aria-label="Nova tarefa" aria-describedby="preview-note" data-old="<?= e(json_encode($old, JSON_INVALID_UTF8_SUBSTITUTE)) ?>">
                             <?= csrf_field() ?><input type="hidden" name="action" value="create"><input type="hidden" name="id" value="">
                             <div class="field"><label for="titulo">Título <span

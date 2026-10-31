@@ -16,6 +16,7 @@
     --accent: #8B5CF6;
     --on-primary: #FFFFFF;
 }
+/* A paleta escura sobrescreve os tokens diferentes; os demais são herdados da raiz. */
 [data-theme="dark"] {
     color-scheme: dark;
     --bg: #0B1020;
@@ -55,6 +56,7 @@ h3 { font-size: 1.125rem; font-weight: 600; }
 .sidebar { display: flex; flex-direction: column; gap: 2rem; padding: 2rem 1.25rem; background: var(--surface); border-right: 1px solid var(--border); }
 .brand { display: block; width: 8.25rem; margin: 0 .75rem; }
 .brand img { display: block; width: 100%; height: auto; }
+/* Alterna os arquivos originais da marca conforme o tema, sem alterar suas dimensões. */
 .brand .logo-dark { display: none; }
 [data-theme="dark"] .logo-light { display: none; }
 [data-theme="dark"] .brand .logo-dark { display: block; }
@@ -68,15 +70,18 @@ h3 { font-size: 1.125rem; font-weight: 600; }
 .nav-link > span:first-child { width: 1.25rem; font-size: 1.25rem; line-height: 1; text-align: center; }
 .nav-link.is-active { background: var(--primary-soft); color: var(--text); font-weight: 600; }
 .nav-count { margin-left: auto; font-size: .75rem; }
+/* A margem automática ocupa o espaço livre e aproxima o card e a conta da base da sidebar. */
 .sidebar-note { margin-top: auto; padding: 1rem; background: var(--surface-secondary); border-radius: .75rem; }
 .note-mark { display: block; color: var(--primary); font-size: 1.75rem; margin-bottom: .75rem; }
 .sidebar-note strong { font-size: .8125rem; }
 .sidebar-note p { margin-top: .5rem; color: var(--text-secondary); font-size: .75rem; line-height: 1.7; }
 .account-links { border-top: 1px solid var(--border); padding: 1.25rem .5rem 0; font-size: .8125rem; }
+/* Separação entre o seletor de aparência e a ação de encerrar a sessão. */
 .theme-field { margin-bottom: 1rem; }
 .account-links > a { display: flex; justify-content: space-between; font-weight: 600; }
 .account-links p { margin-top: .5rem; color: var(--text-secondary); font-size: .75rem; }
 .account-links p a { color: var(--primary); }
+/* Permite encolher a coluna do Grid sem forçar largura além da área disponível. */
 .main-layout { min-width: 0; }
 .topbar { min-height: 5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 2.5rem; border-bottom: 1px solid var(--border); background: var(--surface); font-size: .75rem; color: var(--text-secondary); }
 .topbar p span { margin: 0 .75rem; color: var(--border); }
@@ -91,6 +96,7 @@ h3 { font-size: 1.125rem; font-weight: 600; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 2.75rem; padding: .75rem 1rem; border: 1px solid transparent; border-radius: .5rem; font-size: .875rem; font-weight: 600; text-align: center; }
 .button-primary { background: var(--primary); color: var(--on-primary); }
 .button-secondary { background: var(--surface); border-color: var(--border); color: var(--text); }
+/* Indicadores e filtros compartilham tokens de superfície, texto e borda dos dois temas. */
 .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-bottom: 2rem; }
 .stat-card { padding: 1.25rem; border: 1px solid var(--border); border-radius: .75rem; background: var(--surface); }
 .stat-card dt { display: flex; justify-content: space-between; align-items: center; gap: .5rem; color: var(--text-secondary); font-size: .8125rem; }
@@ -130,6 +136,7 @@ button.nav-link { width: 100%; border: 0; background: transparent; font-family: 
 .page-footer { padding-top: 2rem; text-align: center; font-size: .75rem; color: var(--text-secondary); }
 
 /* Lista de tarefas da demonstração temporária. */
+/* Mantém hidden efetivo mesmo quando os componentes definem seu próprio display. */
 [hidden] { display: none !important; }
 .temporary-note { padding: 1rem 1.5rem 0; color: var(--text-secondary); font-size: .8125rem; }
 .task-list { list-style: none; padding: 0; margin: 0; }
@@ -162,11 +169,15 @@ a, button, input, select, textarea { transition: background-color 180ms ease, bo
 .button-primary:disabled { background: var(--primary); }
 
 /* 6. Responsividade. */
+/* Desktop: limita o Grid à viewport e mantém a rolagem nas colunas, sem alongar a sidebar. */
 @media (min-width: 769px) {
     .app-layout { height: 100vh; height: 100dvh; min-height: 0; grid-template-rows: minmax(0, 1fr); }
     .sidebar, .main-layout { min-height: 0; overflow-y: auto; }
+    /* Contém os textos acessíveis absolutos para que não ampliem a rolagem do documento. */
     .main-layout { position: relative; }
+    /* Mantém o cabeçalho no topo da coluna rolável, preservando seu espaço no fluxo. */
     .topbar { position: sticky; top: 0; z-index: 1; }
+    /* Em janelas baixas, preserva os blocos internos, acessíveis pela rolagem da sidebar. */
     .sidebar > * { flex-shrink: 0; }
 }
 @media (max-width: 1024px) {
@@ -180,6 +191,7 @@ a, button, input, select, textarea { transition: background-color 180ms ease, bo
     .search-field { grid-column: 1 / -1; }
 }
 @media (max-width: 768px) {
+    /* No mobile, o menu entra no fluxo vertical e a página usa a rolagem normal do documento. */
     .app-layout { display: block; }
     .sidebar { gap: 1rem; padding: 1rem; border-right: 0; border-bottom: 1px solid var(--border); }
     .brand { width: 6.5rem; margin: 0; }
@@ -210,6 +222,7 @@ a, button, input, select, textarea { transition: background-color 180ms ease, bo
     .panel-footer { flex-direction: column; gap: .25rem; padding-inline: 1rem; }
     .form-actions { align-items: stretch; flex-direction: column; }
 }
+/* Respeita a preferência do sistema por menos movimento nas transições. */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }

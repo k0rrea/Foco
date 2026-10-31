@@ -1,4 +1,5 @@
 <?php $register = true; require dirname(__DIR__, 2) . "/app/auth.php"; ?>
+<!-- Página de cadastro: o controlador acima prepara os dados antes de qualquer saída HTML. -->
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
 
@@ -8,6 +9,7 @@
     <meta name="description" content="Crie sua conta no Foco e comece a organizar suas tarefas e prioridades.">
     <title>Criar conta | Foco</title>
     <link rel="icon" type="image/png" href="../assets/images/FocoApp.png">
+    <!-- Aplica a aparência antes dos estilos para minimizar flashes do tema incorreto. -->
     <script src="../assets/js/theme.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -29,6 +31,7 @@
                     <h1 id="cadastro-titulo">Seu foco começa aqui.</h1>
                     <p>Crie sua conta e dê o primeiro passo.</p>
                 </header>
+                <!-- O envio vai ao próprio endereço; o servidor valida o token CSRF e os dados. -->
                 <form class="auth-form" method="post" aria-describedby="cadastro-notice">
                     <?= csrf_field() ?>
                     <div class="field">
