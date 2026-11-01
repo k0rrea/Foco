@@ -2,7 +2,9 @@
 // Controlador compartilhado de login e cadastro; a página define o modo pela variável $register.
 require_once __DIR__ . '/bootstrap.php';
 // Uma sessão já autenticada segue diretamente para a área de tarefas.
-if (!empty($_SESSION['user_id'])) { redirect('../index.php'); }
+if (!empty($_SESSION['user_id'])) {
+    redirect('../index.php');
+}
 $error = '';
 $name = $email = '';
 // Processa apenas envios do formulário; em GET, prepara os valores iniciais da página.
@@ -31,8 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $stmt->fetch();
             // No cadastro, impede e-mail repetido e armazena somente o hash da senha.
             if ($register) {
-                if ($user) { $error = 'Este e-mail já está cadastrado.'; }
-                else {
+                if ($user) {
+                    $error = 'Este e-mail já está cadastrado.';
+                } else {
                     $stmt = db()->prepare('INSERT INTO usuarios (nome, email, senha_hash) VALUES (?, ?, ?)');
                     $stmt->execute([$name, $email, password_hash($password, PASSWORD_DEFAULT)]);
                     $_SESSION['flash'] = 'Conta criada. Entre com seu e-mail e senha.';
@@ -44,12 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION = ['user_id' => (int) $user['id']];
                 csrf();
                 redirect('../index.php');
-            } else { $error = 'E-mail ou senha inválidos.'; }
-        // O código 1062 trata também duplicidade de e-mail entre requisições concorrentes.
+            } else {
+                $error = 'E-mail ou senha inválidos.';
+            }
+            // O código 1062 trata também duplicidade de e-mail entre requisições concorrentes.
         } catch (PDOException $exception) {
             $error = $register && ($exception->errorInfo[1] ?? null) === 1062
                 ? 'Este e-mail já está cadastrado.' : failure();
-        } catch (Throwable $exception) { $error = failure(); }
+        } catch (Throwable $exception) {
+            $error = failure();
+        }
     }
 }
 // Prioriza erros e consome a mensagem de sessão uma única vez após o redirecionamento.

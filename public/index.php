@@ -56,7 +56,8 @@
                         <option value="system" selected>Sistema</option>
                     </select>
                 </div>
-                <form action="logout.php" method="post"><?= csrf_field() ?><button class="nav-link" type="submit">Sair da minha conta <span aria-hidden="true">↗</span></button></form>
+                <form action="logout.php" method="post"><?= csrf_field() ?><button class="nav-link" type="submit">Sair
+                        da minha conta <span aria-hidden="true">↗</span></button></form>
             </div>
         </aside>
 
@@ -108,7 +109,8 @@
                 <section id="tarefas" class="panel tasks-panel" aria-labelledby="tarefas-titulo">
                     <header class="section-heading">
                         <div>
-                            <h2 id="tarefas-titulo">Minhas tarefas <span class="count-badge"><?= count($tasks) ?></span></h2>
+                            <h2 id="tarefas-titulo">Minhas tarefas <span class="count-badge"><?= count($tasks) ?></span>
+                            </h2>
                             <p>Pequenas ações. Novas possibilidades.</p>
                         </div>
                         <span class="muted">Visualização em lista</span>
@@ -136,7 +138,8 @@
                     </fieldset>
 
                     <!-- O parcial gera as linhas; data-user distingue o estado dos filtros por usuário. -->
-                    <ul id="task-list" class="task-list" aria-label="Tarefas cadastradas" data-user="<?= $userId ?>" <?= !$tasks ? "hidden" : "" ?>><?php require dirname(__DIR__) . "/app/task-list.php"; ?></ul>
+                    <ul id="task-list" class="task-list" aria-label="Tarefas cadastradas" data-user="<?= $userId ?>"
+                        <?= !$tasks ? "hidden" : "" ?>><?php require dirname(__DIR__) . "/app/task-list.php"; ?></ul>
                     <p id="no-results" class="no-results" hidden>Nenhuma tarefa corresponde aos filtros escolhidos.</p>
                     <p id="task-feedback" class="sr-only" role="status"></p>
                     <div class="empty-state" <?= $tasks ? "hidden" : "" ?>>
@@ -147,7 +150,8 @@
                         <button class="button button-secondary" type="button" data-open-task aria-haspopup="dialog"
                             aria-controls="nova-tarefa">＋ Preparar minha primeira tarefa</button>
                     </div>
-                    <footer class="panel-footer"><span id="task-count"><?= count($tasks) ?> tarefa(s) cadastrada(s)</span><span>Seu ritmo.
+                    <footer class="panel-footer"><span id="task-count"><?= count($tasks) ?> tarefa(s)
+                            cadastrada(s)</span><span>Seu ritmo.
                             Suas conquistas.</span></footer>
                 </section>
 
@@ -162,10 +166,13 @@
                             aria-label="Fechar nova tarefa">×</button>
                     </header>
                     <div class="editor-content">
-                        <p id="preview-note" class="preview-note"><?= e($error ?: 'Preencha os dados para salvar a tarefa na sua conta.') ?></p>
+                        <p id="preview-note" class="preview-note">
+                            <?= e($error ?: 'Preencha os dados para salvar a tarefa na sua conta.') ?></p>
                         <!-- data-old repõe dados após erro; action e id distinguem criação de edição no servidor. -->
-                        <form method="post" aria-label="Nova tarefa" aria-describedby="preview-note" data-old="<?= e(json_encode($old, JSON_INVALID_UTF8_SUBSTITUTE)) ?>">
-                            <?= csrf_field() ?><input type="hidden" name="action" value="create"><input type="hidden" name="id" value="">
+                        <form method="post" aria-label="Nova tarefa" aria-describedby="preview-note"
+                            data-old="<?= e(json_encode($old, JSON_INVALID_UTF8_SUBSTITUTE)) ?>">
+                            <?= csrf_field() ?><input type="hidden" name="action" value="create"><input type="hidden"
+                                name="id" value="">
                             <div class="field"><label for="titulo">Título <span
                                         class="muted">(obrigatório)</span></label><input id="titulo" name="title"
                                     type="text" placeholder="Ex.: revisar o conteúdo da aula" maxlength="150" required

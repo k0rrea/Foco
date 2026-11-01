@@ -23,9 +23,11 @@ try {
             }
             $key = trim($parts[0]);
             $value = trim($parts[1]);
-            if (strlen($value) >= 2
+            if (
+                strlen($value) >= 2
                 && (($value[0] === '"' && substr($value, -1) === '"')
-                    || ($value[0] === "'" && substr($value, -1) === "'"))) {
+                    || ($value[0] === "'" && substr($value, -1) === "'"))
+            ) {
                 $value = substr($value, 1, -1);
             }
             $local[$key] = $value;
@@ -43,10 +45,12 @@ try {
     $user = $setting('DB_USER');
     $password = $setting('DB_PASS');
 
-    if ($user === null || $user === '' || $password === null
+    if (
+        $user === null || $user === '' || $password === null
         || !ctype_digit($port) || (int) $port < 1 || (int) $port > 65535
         || !preg_match('/\A[a-zA-Z0-9_.:-]+\z/', $host)
-        || !preg_match('/\A[a-zA-Z0-9_]+\z/', $name)) {
+        || !preg_match('/\A[a-zA-Z0-9_]+\z/', $name)
+    ) {
         throw new RuntimeException('Configuração inválida.');
     }
 

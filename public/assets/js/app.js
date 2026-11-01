@@ -1,77 +1,139 @@
 // O PHP renderiza e persiste as tarefas; o JavaScript cuida das interações.
-const taskModal = document.querySelector('#nova-tarefa');
+const taskModal = document.querySelector("#nova-tarefa");
 // Inicializa as interações de tarefas somente quando o diálogo está presente na página.
 if (taskModal) {
-    const form = taskModal.querySelector('form');
-    const rows = [...document.querySelectorAll('.task-row')];
-    const search = document.querySelector('#busca');
-    const statusFilter = document.querySelector('#status');
-    const priorityFilter = document.querySelector('#prioridade-filtro');
-    // Preserva os filtros nas recargas causadas por edição, status e exclusão.
-    const filterKey = `foco-filters-${document.querySelector('#task-list').dataset.user}`;
-    try {
-        const saved = JSON.parse(sessionStorage.getItem(filterKey) || 'null');
-        sessionStorage.removeItem(filterKey);
-        if (saved) [search.value, statusFilter.value, priorityFilter.value] = saved;
-    } catch { /* Armazenamento opcional: filtros continuam funcionando sem ele. */ }
-    // Guarda filtros antes do POST; criar tarefa limpa os filtros e sair não grava esse estado.
-    document.querySelectorAll('form').forEach(postForm => postForm.addEventListener('submit', () => {
-        if (postForm.getAttribute('action') === 'logout.php') return;
-        try {
-            const create = postForm === form && form.elements.namedItem('action').value === 'create';
-            sessionStorage.setItem(filterKey, JSON.stringify(create ? ['', '', ''] : [search.value, statusFilter.value, priorityFilter.value]));
-        } catch { /* O envio do formulário independe do armazenamento. */ }
-    }));
-    /** Combina texto, status e prioridade e atualiza a visibilidade das linhas sem consultar o servidor. */
-    function filterTasks() {
-        const query = search.value.trim().toLocaleLowerCase('pt-BR');
-        let count = 0;
-        rows.forEach(row => {
-            const text = `${row.querySelector('.task-title').textContent} ${row.querySelector('.task-description').textContent}`.toLocaleLowerCase('pt-BR');
-            row.hidden = !(text.includes(query) && (!statusFilter.value || row.dataset.status === statusFilter.value) && (!priorityFilter.value || row.dataset.priority === priorityFilter.value));
-            if (!row.hidden) count++;
-        });
-        document.querySelector('#task-list').hidden = count === 0;
-        document.querySelector('#no-results').hidden = !rows.length || count > 0;
-        document.querySelector('#task-count').textContent = rows.length ? `${count} de ${rows.length} tarefa(s)` : 'Nenhuma tarefa cadastrada';
-    }
-    [search, statusFilter, priorityFilter].forEach(control => control.addEventListener('input', filterTasks));
-    /**
-     * Prepara o diálogo para criação, edição ou reapresentação de um envio inválido.
-     * @param {Object} values Campos e ação do formulário; sem dados, inicia uma nova tarefa.
-     */
-    function openTask(values = {}) {
-        form.reset();
-        form.elements.namedItem('action').value = values.action || (values.id ? 'update' : 'create');
-        form.elements.namedItem('id').value = values.id || '';
-        ['title', 'description', 'due_date', 'priority', 'category'].forEach(key => {
-            if (values[key] !== undefined) form.elements.namedItem(key).value = values[key];
-        });
-        document.querySelector('#nova-tarefa-titulo').textContent = values.id ? 'Editar tarefa' : 'Nova tarefa';
-        form.setAttribute('aria-label', values.id ? 'Editar tarefa' : 'Nova tarefa');
-        form.elements.namedItem('title').setCustomValidity('');
-        taskModal.showModal();
-        document.body.classList.add('has-modal');
-    }
-    // Os atributos data-* conectam os botões ao diálogo e transportam os dados da edição.
-    document.querySelectorAll('[data-open-task]').forEach(button => button.addEventListener('click', () => openTask()));
-    document.querySelectorAll('[data-edit-task]').forEach(button => button.addEventListener('click', () => openTask(JSON.parse(button.dataset.editTask))));
-    taskModal.querySelectorAll('[data-close-task]').forEach(button => button.addEventListener('click', () => taskModal.close()));
-    taskModal.addEventListener('close', () => document.body.classList.remove('has-modal'));
-    // O status envia o formulário validado; a confirmação pode cancelar o POST de exclusão.
-    document.querySelectorAll('[data-status-form]').forEach(statusForm => statusForm.querySelector('select').addEventListener('change', () => statusForm.requestSubmit()));
-    document.querySelectorAll('[data-delete-task]').forEach(deleteForm => deleteForm.addEventListener('submit', event => {
-        if (!window.confirm('Excluir esta tarefa? Essa ação não pode ser desfeita.')) event.preventDefault();
-    }));
-    // Complementa a validação nativa para impedir títulos compostos apenas por espaços.
-    const title = form.elements.namedItem('title');
-    title.addEventListener('input', () => title.setCustomValidity(''));
-    form.addEventListener('submit', event => {
-        title.setCustomValidity(title.value.trim() ? '' : 'Digite um título para a tarefa.');
-        if (!form.reportValidity()) event.preventDefault();
+  const form = taskModal.querySelector("form");
+  const rows = [...document.querySelectorAll(".task-row")];
+  const search = document.querySelector("#busca");
+  const statusFilter = document.querySelector("#status");
+  const priorityFilter = document.querySelector("#prioridade-filtro");
+  // Preserva os filtros nas recargas causadas por edição, status e exclusão.
+  const filterKey = `foco-filters-${document.querySelector("#task-list").dataset.user}`;
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(filterKey) || "null");
+    sessionStorage.removeItem(filterKey);
+    if (saved) [search.value, statusFilter.value, priorityFilter.value] = saved;
+  } catch {
+    /* Armazenamento opcional: filtros continuam funcionando sem ele. */
+  }
+  // Guarda filtros antes do POST; criar tarefa limpa os filtros e sair não grava esse estado.
+  document.querySelectorAll("form").forEach((postForm) =>
+    postForm.addEventListener("submit", () => {
+      if (postForm.getAttribute("action") === "logout.php") return;
+      try {
+        const create =
+          postForm === form &&
+          form.elements.namedItem("action").value === "create";
+        sessionStorage.setItem(
+          filterKey,
+          JSON.stringify(
+            create
+              ? ["", "", ""]
+              : [search.value, statusFilter.value, priorityFilter.value],
+          ),
+        );
+      } catch {
+        /* O envio do formulário independe do armazenamento. */
+      }
+    }),
+  );
+  /** Combina texto, status e prioridade e atualiza a visibilidade das linhas sem consultar o servidor. */
+  function filterTasks() {
+    const query = search.value.trim().toLocaleLowerCase("pt-BR");
+    let count = 0;
+    rows.forEach((row) => {
+      const text =
+        `${row.querySelector(".task-title").textContent} ${row.querySelector(".task-description").textContent}`.toLocaleLowerCase(
+          "pt-BR",
+        );
+      row.hidden = !(
+        text.includes(query) &&
+        (!statusFilter.value || row.dataset.status === statusFilter.value) &&
+        (!priorityFilter.value || row.dataset.priority === priorityFilter.value)
+      );
+      if (!row.hidden) count++;
     });
-    // Reabre o diálogo com os dados devolvidos pelo PHP quando o envio anterior apresentou erro.
-    const old = JSON.parse(form.dataset.old);
-    if (old.action) openTask(old);
-    filterTasks();
+    document.querySelector("#task-list").hidden = count === 0;
+    document.querySelector("#no-results").hidden = !rows.length || count > 0;
+    document.querySelector("#task-count").textContent = rows.length
+      ? `${count} de ${rows.length} tarefa(s)`
+      : "Nenhuma tarefa cadastrada";
+  }
+  [search, statusFilter, priorityFilter].forEach((control) =>
+    control.addEventListener("input", filterTasks),
+  );
+  /**
+   * Prepara o diálogo para criação, edição ou reapresentação de um envio inválido.
+   * @param {Object} values Campos e ação do formulário; sem dados, inicia uma nova tarefa.
+   */
+  function openTask(values = {}) {
+    form.reset();
+    form.elements.namedItem("action").value =
+      values.action || (values.id ? "update" : "create");
+    form.elements.namedItem("id").value = values.id || "";
+    ["title", "description", "due_date", "priority", "category"].forEach(
+      (key) => {
+        if (values[key] !== undefined)
+          form.elements.namedItem(key).value = values[key];
+      },
+    );
+    document.querySelector("#nova-tarefa-titulo").textContent = values.id
+      ? "Editar tarefa"
+      : "Nova tarefa";
+    form.setAttribute(
+      "aria-label",
+      values.id ? "Editar tarefa" : "Nova tarefa",
+    );
+    form.elements.namedItem("title").setCustomValidity("");
+    taskModal.showModal();
+    document.body.classList.add("has-modal");
+  }
+  // Os atributos data-* conectam os botões ao diálogo e transportam os dados da edição.
+  document
+    .querySelectorAll("[data-open-task]")
+    .forEach((button) => button.addEventListener("click", () => openTask()));
+  document
+    .querySelectorAll("[data-edit-task]")
+    .forEach((button) =>
+      button.addEventListener("click", () =>
+        openTask(JSON.parse(button.dataset.editTask)),
+      ),
+    );
+  taskModal
+    .querySelectorAll("[data-close-task]")
+    .forEach((button) =>
+      button.addEventListener("click", () => taskModal.close()),
+    );
+  taskModal.addEventListener("close", () =>
+    document.body.classList.remove("has-modal"),
+  );
+  // O status envia o formulário validado; a confirmação pode cancelar o POST de exclusão.
+  document
+    .querySelectorAll("[data-status-form]")
+    .forEach((statusForm) =>
+      statusForm
+        .querySelector("select")
+        .addEventListener("change", () => statusForm.requestSubmit()),
+    );
+  document.querySelectorAll("[data-delete-task]").forEach((deleteForm) =>
+    deleteForm.addEventListener("submit", (event) => {
+      if (
+        !window.confirm("Excluir esta tarefa? Essa ação não pode ser desfeita.")
+      )
+        event.preventDefault();
+    }),
+  );
+  // Complementa a validação nativa para impedir títulos compostos apenas por espaços.
+  const title = form.elements.namedItem("title");
+  title.addEventListener("input", () => title.setCustomValidity(""));
+  form.addEventListener("submit", (event) => {
+    title.setCustomValidity(
+      title.value.trim() ? "" : "Digite um título para a tarefa.",
+    );
+    if (!form.reportValidity()) event.preventDefault();
+  });
+  // Reabre o diálogo com os dados devolvidos pelo PHP quando o envio anterior apresentou erro.
+  const old = JSON.parse(form.dataset.old);
+  if (old.action) openTask(old);
+  filterTasks();
 }

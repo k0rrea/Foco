@@ -11,27 +11,43 @@ $old = [];
 // Alterações exigem POST e token CSRF; a identificação do usuário vem da sessão.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = input('action');
-    if (!valid_csrf()) { http_response_code(403); $error = 'Formulário expirado. Atualize a página e tente novamente.'; }
-    else {
+    if (!valid_csrf()) {
+        http_response_code(403);
+        $error = 'Formulário expirado. Atualize a página e tente novamente.';
+    } else {
         try {
             $id = filter_var(input('id'), FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-            if (!in_array($action, ['create', 'update', 'status', 'delete'], true)) { throw new InvalidArgumentException('Operação inválida.'); }
+            if (!in_array($action, ['create', 'update', 'status', 'delete'], true)) {
+                throw new InvalidArgumentException('Operação inválida.');
+            }
             // Antes de alterar ou excluir, confirma que a tarefa pertence ao usuário autenticado.
             if ($action !== 'create') {
-                if (!$id) { throw new InvalidArgumentException('Tarefa indisponível.'); }
+                if (!$id) {
+                    throw new InvalidArgumentException('Tarefa indisponível.');
+                }
                 $stmt = db()->prepare('SELECT id FROM tarefas WHERE id = ? AND usuario_id = ?');
                 $stmt->execute([$id, $userId]);
-                if (!$stmt->fetch()) { throw new InvalidArgumentException('Tarefa indisponível.'); }
+                if (!$stmt->fetch()) {
+                    throw new InvalidArgumentException('Tarefa indisponível.');
+                }
             }
             // Criação e edição compartilham validações; $old permite repor o formulário se houver erro.
             if ($action === 'create' || $action === 'update') {
                 $old = ['title' => input('title'), 'description' => input('description'), 'due_date' => input('due_date'), 'priority' => input('priority'), 'category' => input('category'), 'id' => $id ?: '', 'action' => $action];
-                if ($old['title'] === '' || length($old['title']) > 150) { throw new InvalidArgumentException('Informe um título de até 150 caracteres.'); }
-                if (strlen($old['description']) > 65535) { throw new InvalidArgumentException('A descrição deve ter até 65535 bytes.'); }
-                if (!isset($priorities[$old['priority']]) || ($old['category'] !== '' && !isset($categories[$old['category']]))) { throw new InvalidArgumentException('Prioridade ou categoria inválida.'); }
+                if ($old['title'] === '' || length($old['title']) > 150) {
+                    throw new InvalidArgumentException('Informe um título de até 150 caracteres.');
+                }
+                if (strlen($old['description']) > 65535) {
+                    throw new InvalidArgumentException('A descrição deve ter até 65535 bytes.');
+                }
+                if (!isset($priorities[$old['priority']]) || ($old['category'] !== '' && !isset($categories[$old['category']]))) {
+                    throw new InvalidArgumentException('Prioridade ou categoria inválida.');
+                }
                 // A conversão de ida e volta rejeita datas normalizadas, como dias inexistentes no mês.
                 $date = DateTimeImmutable::createFromFormat('!Y-m-d', $old['due_date']);
-                if ($old['due_date'] !== '' && (!$date || $date->format('Y-m-d') !== $old['due_date'] || $old['due_date'] < '1000-01-01' || $old['due_date'] > '9999-12-31')) { throw new InvalidArgumentException('Informe um prazo válido.'); }
+                if ($old['due_date'] !== '' && (!$date || $date->format('Y-m-d') !== $old['due_date'] || $old['due_date'] < '1000-01-01' || $old['due_date'] > '9999-12-31')) {
+                    throw new InvalidArgumentException('Informe um prazo válido.');
+                }
                 // Campos opcionais vazios são enviados como NULL, seguindo o esquema do banco.
                 $values = [$old['title'], $old['description'] ?: null, $old['due_date'] ?: null, $old['priority'], $old['category'] ?: null];
                 // Os parâmetros mantêm os dados fora do SQL; a edição também restringe usuario_id.
@@ -42,10 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt = db()->prepare('UPDATE tarefas SET titulo = ?, descricao = ?, prazo = ?, prioridade = ?, categoria = ? WHERE id = ? AND usuario_id = ?');
                     $stmt->execute(array_merge($values, [$id, $userId]));
                 }
-            // A atualização de status aceita apenas os valores definidos no mapa do controlador.
+                // A atualização de status aceita apenas os valores definidos no mapa do controlador.
             } elseif ($action === 'status') {
                 $status = input('status');
-                if (!isset($statuses[$status])) { throw new InvalidArgumentException('Status inválido.'); }
+                if (!isset($statuses[$status])) {
+                    throw new InvalidArgumentException('Status inválido.');
+                }
                 $stmt = db()->prepare('UPDATE tarefas SET status = ? WHERE id = ? AND usuario_id = ?');
                 $stmt->execute([$status, $id, $userId]);
             } else {
@@ -56,8 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Redireciona após sucesso para evitar repetição do POST ao atualizar a página.
             $_SESSION['flash'] = 'Tarefa ' . ($action === 'delete' ? 'excluída' : 'salva') . ' com sucesso.';
             redirect('index.php');
-        } catch (InvalidArgumentException $exception) { $error = $exception->getMessage(); }
-        catch (Throwable $exception) { $error = failure(); }
+        } catch (InvalidArgumentException $exception) {
+            $error = $exception->getMessage();
+        } catch (Throwable $exception) {
+            $error = failure();
+        }
     }
 }
 // A listagem consulta somente tarefas da sessão atual, das mais recentes para as mais antigas.
@@ -66,7 +87,9 @@ try {
     $stmt = db()->prepare('SELECT id, titulo, descricao, prazo, prioridade, categoria, status FROM tarefas WHERE usuario_id = ? ORDER BY id DESC');
     $stmt->execute([$userId]);
     $tasks = $stmt->fetchAll();
-} catch (Throwable $exception) { $error = failure(); }
+} catch (Throwable $exception) {
+    $error = failure();
+}
 // A mensagem temporária é exibida uma vez; erros têm prioridade sobre confirmações.
 $notice = $error ?: ($_SESSION['flash'] ?? 'Suas tarefas são salvas na sua conta.');
 unset($_SESSION['flash']);

@@ -1,4 +1,5 @@
-<?php $register = true; require dirname(__DIR__, 2) . "/app/auth.php"; ?>
+<?php $register = true;
+require dirname(__DIR__, 2) . "/app/auth.php"; ?>
 <!-- Página de cadastro: o controlador acima prepara os dados antes de qualquer saída HTML. -->
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
