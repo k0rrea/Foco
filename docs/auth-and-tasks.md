@@ -2,7 +2,7 @@
 
 ## Antes de testar
 
-Conclua o [guia de instalação](../README.md), incluindo banco, `.env`, Apache apontando para `public/` e sessões PHP. Use o endereço configurado, como `http://foco.local/`. Não é necessário reimportar o SQL se as tabelas já correspondem ao schema; uma instalação nova precisa da importação inicial.
+Conclua o [guia de instalação](../README.md), incluindo banco, `.env`, servidor PHP com raiz web em `public/` e sessões PHP. Use `http://127.0.0.1:8000` no caminho principal ou `http://foco.local/` se optar pelo [Apache com VirtualHost](apache-setup.md). Não é necessário reimportar o SQL se as tabelas já correspondem ao schema; uma instalação nova precisa da importação inicial.
 
 Use contas e tarefas próprias de teste. Os procedimentos a seguir gravam dados. Não altere identificadores de registros de terceiros. Não existe rotina automática de testes ou limpeza incluída no repositório; remova tarefas pela interface após a verificação. A remoção de contas, se desejada, é administrativa e exige cuidado, pois a chave estrangeira exclui suas tarefas em cascata.
 
@@ -45,8 +45,18 @@ JavaScript é necessário para abrir os modais e usar os filtros. Os registros e
 
 ## Histórico e limites da validação
 
-Na implementação anterior, passaram as verificações de sintaxe PHP (XAMPP PHP 8.2.4), sintaxe JavaScript e `git diff --check`. Testes HTTP com o PHP do XAMPP e MariaDB 10.4.28 cobriram cadastro, e-mail duplicado, confirmação de senha, login correto/incorreto, regeneração da sessão, dashboard privado, CSRF, CRUD, persistência, indicadores, escape HTML, validações e isolamento entre duas contas.
+Na implementação anterior, passaram as verificações de sintaxe PHP (XAMPP PHP 8.2.4), sintaxe JavaScript e `git diff --check`. Testes HTTP no ambiente original Fedora Linux, com o PHP do XAMPP e MariaDB 10.4.28 cobriram cadastro, e-mail duplicado, confirmação de senha, login correto/incorreto, regeneração da sessão, dashboard privado, CSRF, CRUD, persistência, indicadores, escape HTML, validações e isolamento entre duas contas.
 
-Os testes HTTP utilizaram um servidor PHP local temporário e não validaram a renderização visual nem as interações JavaScript em navegador real. Execute o roteiro acima no Apache/XAMPP para conferir esses pontos. As contas temporárias criadas durante os testes foram removidas após a validação, sem alterar registros preexistentes.
+Os testes HTTP utilizaram um servidor PHP local temporário e não validaram a renderização visual nem as interações JavaScript em navegador real. Execute o roteiro acima em navegador real, usando o servidor embutido do PHP ou a alternativa Apache, para conferir esses pontos. As contas temporárias criadas durante os testes foram removidas após a validação, sem alterar registros preexistentes.
 
-A revisão documental não repetiu testes que gravam dados e não instalou ou reconfigurou serviços. Windows, instalação limpa e conferência visual em navegador real permanecem como validações manuais.
+No teste adicional relatado pelo responsável pelo projeto, em **Windows 10**, com XAMPP em `C:\xampp`, MariaDB **10.4.32** na porta **3308** e PHP fornecido pelo XAMPP (versão não informada), o projeto ficou fora de `htdocs` e foi servido por:
+
+```powershell
+& "C:\xampp\php\php.exe" -S 127.0.0.1:8000 -t public
+```
+
+Em `http://127.0.0.1:8000`, foram confirmados execução, acesso à interface, criação de conta, login, criação de tarefas e persistência após atualizar a página. Edição, exclusão, filtros, isolamento entre usuários, demais funcionalidades e configuração de VirtualHost do Apache **não foram validados nesse teste**. O acesso à interface não equivale a uma conferência visual completa ou a teste de todas as interações JavaScript.
+
+Também foi relatado pelo responsável pelo projeto um teste com **MySQL 8.4.13 em um container Docker no Fedora Linux**, com porta publicada em `127.0.0.1:3307`. O banco `db_foco` foi importado utilizando `database/schema.sql`, e a aplicação foi conectada pelas variáveis do `.env`, com `DB_HOST=127.0.0.1` e `DB_PORT=3307`. Foram realizados com sucesso testes de cadastro, login e operações CRUD de tarefas. Esses resultados se referem à versão e ao ambiente informados e não validam todas as versões do MySQL.
+
+A presente revisão documental não repetiu testes que gravam dados, instalação ou configuração de serviços. A execução integral deste roteiro no Windows, a instalação limpa a partir das instruções atualizadas e a conferência visual completa permanecem pendentes.
